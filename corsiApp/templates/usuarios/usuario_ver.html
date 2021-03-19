@@ -1,0 +1,9 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div class="date">
+	<a class="btn btn-default" href="{% url 'usuario_editar' pk=usuario.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+	</div>
+	<h1>{{ usuario.nombre }}</h1>
+	<p>{{ usuario.apellidos|linebreaksbr }}</p>
+{% endblock %}

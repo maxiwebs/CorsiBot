@@ -1,0 +1,30 @@
+#! /bin/sh
+# /etc/init.d/corsi-init
+ 
+### BEGIN INIT INFO
+# Provides:          corsi-init
+# Required-Start:    $all
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Script de inicializacion de server
+# Description:       Script para arrancar el runserver y el pigpiod (RGBs)
+### END INIT INFO
+ 
+ 
+case "$1" in
+ start)
+   echo "Arrancando corsi-init"
+   /home/pi/djangoProjects/scripts/initCorsi &
+   ;;
+ stop)
+   echo "Deteniendo corsi-init"
+ 
+   ;;
+ *)
+   echo "Modo de uso: /etc/init.d/corsi-init {start|stop}"
+   exit 1
+   ;;
+esac
+ 
+exit 0

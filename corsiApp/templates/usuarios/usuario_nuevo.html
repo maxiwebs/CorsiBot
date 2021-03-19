@@ -1,0 +1,12 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div>
+	  <h2>Nuevo Usuario</h2>
+	</div>
+	
+	<form method="POST" class="post-form">{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="save btn btn-default">Guardar</button>
+	</form>
+{% endblock %}

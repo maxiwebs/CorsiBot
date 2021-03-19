@@ -1,0 +1,22 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div>
+	  <h2>Nueva Toma De Datos</h2>
+ 	 	{% if mensaje == 0 %}
+ 	 		Suba un archivo de tomaDeDatos.
+ 	 	{% elif mensaje == 1 %}
+ 	 		<b><font color ="red">Error. Chequee el archivo y súbalo nuevamente.</font></b>
+ 	 	{% elif mensaje == 2 %}
+ 	 		<b><font color ="red">Error. Ya existe una Toma De Datos con ese nombre.</font></b>
+ 		{% endif%}
+	</div>
+	<br>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Subir</button>
+  </form>
+
+{% endblock %}
+

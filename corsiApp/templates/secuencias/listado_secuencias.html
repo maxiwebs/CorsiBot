@@ -1,0 +1,113 @@
+{% extends 'inicio.html' %}
+{% block content %}
+<a href='../../../../lista_protocolos/subir_toma_datos/'>Subir Toma De Datos</a>
+
+	<div>
+	  <h2>Tomas De Datos del Protocolo <b>{{protocolo.nombreProtocolo}}</b></h2>
+	</div>
+<form action="../../../../export_csv/" method="post">{% csrf_token %}
+	<input type="hidden" name="export" value="protocolo">
+	<input type="hidden" name="tipo" value="extendido">
+	<input type="hidden" name="idProtocolo" value="{{protocolo.id}}">
+
+	<table class="table table-hover">
+			<thead class="thead-inverse"> 
+				<th>Nombre</th>
+				<th>Creación</th>
+				<th>Última evaluación</th>
+				<th>Ver</th>
+				<th>Exportar</th>
+			</thead>
+	{% for tomaDatos in lista_tomasDeDatos %}
+			<tbody>
+				<tr>
+					<td>{{ tomaDatos.nombreTomaDeDatos }}</td>
+					<td>{{ tomaDatos.fechaCreacion }}</td>
+					<td>{{ tomaDatos.ultimaFechaEvaluacion }}</td>
+					<td>
+						<a href='/lista_usuarios_toma/{{tomaDatos.id}}/'>Ver</a>
+					</td>
+					<td>
+						<button name="tomaDatosEnProtocolo" value="{{tomaDatos.id}}" style="width:130px" type="submit">CSV Toma Datos</button>
+					</td>
+			</tr>
+	{% endfor %}
+		</tbody>
+		</table>
+	<input type="button" style="width:110px" onclick="location.href='../../../';" value="Volver" />
+	<button name="tomaDatosEnProtocolo" value="0" style="width:230px" type="submit">Exportar CSV Tomas de Datos</button>
+</form>
+	<br>
+	<div>
+	  <h2>Secuencias del Protocolo <b>{{protocolo.nombreProtocolo}}</b></h2>
+	</div>
+
+{% regroup botonesSecuencias by idSec as listaBotones %}
+	<table style="width: 100%">
+	<tr>
+		<td>
+			<table class="table table-hover">
+				<thead class="thead-inverse"> 
+					<th>Id</th>
+					<th>Botones</th>
+					<th>Probar</th>
+				</thead>
+			{% for idSec in listaBotones %}
+				<tbody>
+					<tr> <td>{{ idSec.grouper }}</td><td>
+					        {% for boton in idSec.list %}
+								{{ boton.valorBoton }}
+							{% endfor %}
+						</td>
+						<td><a href='/lista_protocolos/play/{{protocolo.id}}/{{ idSec.grouper }}/'>Play</a></td>
+					</tr>
+				</tbody>
+			{% endfor %}
+				</table>
+			</td>
+		{% regroup botonesSecuencias by idSec as listaBotones %}
+		<td valign="top">
+			<table class="table table-hover">
+				<thead class="thead-inverse">
+					<th>Test</th>
+				</thead>
+			{% for idSec in listaBotones %}
+				<tbody>
+					<tr>
+						<td>
+						{{ idSec.list.0.secuenciaPrueba }}
+						</td>
+					</tr>
+				</tbody>
+			{% endfor %}
+			</table>
+		</td>
+	</tr>
+</table>
+		<br>
+	<div>
+	  <h2>Propiedades del Protocolo <b>{{protocolo.nombreProtocolo}}</b></h2>
+	</div>
+
+		<table class="table table-hover">
+			<thead class="thead-inverse"> 
+				<th>Campo</th>
+				<th>Valor</th>
+			</thead>
+			<tbody>
+				{% for name, value in protocolo.get_fields %}
+				  {% if value %}
+	  				 <tr><td><b> {{ name }}: </b></td>
+							<td>{{ value }}</td>
+				  {% endif %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+<br>
+
+		<input type="button" style="width:110px" onclick="location.href='../../../';" value="Volver" />
+
+{% endblock %}
+
+

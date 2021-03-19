@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+
+<form action="" method="post">{% csrf_token %}
+	R: <input type="number" name="r" min="0" max="255" value='{{r}}'><br>
+	G: <input type="number" name="g" min="0" max="255" value='{{g}}'><br>
+	B: <input type="number" name="b" min="0" max="255" value='{{b}}'><br>
+<input type="submit" name="ver" value="Ver" />
+</form>
+</body>
+</html>

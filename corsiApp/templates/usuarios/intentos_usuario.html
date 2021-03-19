@@ -1,0 +1,37 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div>
+	  <h2>Listado de Evaluaciones del Usuario para la Toma De Datos</h2>
+	</div>
+	<b>Protocolo:</b> {{ usuario.idTomaDeDatos.idProtocolo.nombreProtocolo }}<br>
+	<b>Nombre Toma Datos:</b> {{ usuario.idTomaDeDatos.nombreTomaDeDatos }}<br>
+	<b>Usuario:</b> {{ usuario.nombre }}<br>
+	<b>Fecha:</b> {{ usuario.idTomaDeDatos.fechaCreacion }}
+	<br>
+	<br>
+<form action="../../export_csv/" method="post">{% csrf_token %}
+	<input type="hidden" name="tipo" value="resumido">
+	<input type="hidden" name="export" value="usuario">
+	<input type="hidden" name="idUsr" value="{{usuario.id}}">
+
+	<table class="table table-hover">
+		<thead class="thead-inverse">
+					<th>Fecha/Hora</th>
+					<th>#ErroresConsecutivos</th>
+					<th>Ver Evaluación</th>
+		</thead>
+		<tbody>
+	    {% for intento in lista_intentos %}
+				<tr><td>{{ intento.timeStamp }}</a></td>
+					<td>{{ intento.erroresConsecutivos }}</td>
+					<td><a href="/ver_botones_intento/{{intento.id}}/">Ver</a></td>
+					</tr>	
+		{% endfor %}
+		</tbody>
+	</table>
+	<br>
+	<input type="button" style="width:110px" onclick="location.href='javascript:history.back(-1);';" value="Volver" />
+	<button style="width:110px" type="submit">Exportar CSV</button>
+</form>
+{% endblock %}

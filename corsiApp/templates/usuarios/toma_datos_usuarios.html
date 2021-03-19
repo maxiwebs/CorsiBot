@@ -1,0 +1,58 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div>
+	  <h2>Listado de Usuarios de la Toma De Datos</h2>
+	</div>
+	<b>Protocolo:</b> {{ tomaDatos.idProtocolo.nombreProtocolo }}<br>
+	<b>Toma De Datos:</b> {{ tomaDatos.nombreTomaDeDatos }}<br>	
+	<b>Fecha Creación:</b> {{ tomaDatos.fechaCreacion }}<br>	
+	<b>Última Evaluación:</b> {{ tomaDatos.ultimaFechaEvaluacion }}
+	<br>
+
+<table class="table table-hover">
+	<thead class="thead-inverse">
+		<th>Nombre</th>
+		<th>#Evaluaciones</th>
+		<th>Explorar</th>
+	</thead>
+	{% for usuario in lista_usuarios_toma %}
+	<tbody>
+			<tr><td>{{ usuario.nombre }}</td>
+				<td>
+					{{usuario.cantIntentos}}
+				</td>
+				<!-- Si tiene al menos 1, habilito link de ver -->
+				{% if usuario.cantIntentos > 0 %}
+					<td><a href="/intentos_usuario/{{usuario.id}}/">Ver</a></td>
+				{% else %}
+					<td>Sin intentos</td>
+				{% endif %}
+			</tr>
+	</tbody>
+	{% endfor %}
+</table>
+<br>
+
+	<div>
+	  <h3>Agregar Usuario</h3>
+	</div>
+	
+	<form action="/agregar_usuario/" method="post">{% csrf_token %}
+		<input type="hidden" name="idTomaDeDatos" value="{{ tomaDatos.id }}">
+		<div>
+	        <label for="name">Nombre:</label>
+	        <input type="text" name="nombreUsuario"/>
+	        <button type="submit">Agregar</button>
+    	</div>
+	</form>
+	<br>
+<form action="../../export_csv/" method="post">{% csrf_token %}
+	<input type="hidden" name="tipo" value="resumido">
+	<input type="hidden" name="export" value="tomaDatos">
+	<input type="hidden" name="idTomaDatos" value="{{ tomaDatos.id }}">
+
+	<input type="button" style="width:110px" onclick="location.href='javascript:history.back(-1);';" value="Volver" />
+	<button style="width:110px" type="submit">Exportar CSV</button>
+</form>
+{% endblock %}

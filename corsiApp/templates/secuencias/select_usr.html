@@ -1,0 +1,36 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div>
+	  <h2>Seleccione el Usuario</h2>
+	</div>
+	<form method="post" action="play_wait_sec/"  class="post-form">
+	<input type="hidden" name="idSec" value="1">
+	<input type="hidden" name="idIntento" value="0">
+	<input type="hidden" name="idProcess" value="0">
+	{% csrf_token %}
+	
+{% regroup intentosTomaDatos by idUsr as listaIntentosUsuario %}
+<table style="width: 70%">
+			<thead>
+				<td><b>Nombre Usuario</b></td>
+				<td><b>#Intentos</b></td>
+				<td><b>Intentar</b></td>
+			</thead>
+	{% for usuario in listaIntentosUsuario %}
+			<tr> <td>{{ usuario.grouper.nombre }}</td>
+				<td>
+					{{usuario.list|length}}
+				</td>
+				<td>
+				<button name="usrId" value="{{usuario.grouper.id}}" type="submit" style="width:150px">Jugar</button>
+				</td>
+			</tr>
+	{% endfor %}
+		</table>
+		<br>
+		<input type="button" style="width:110px" onclick="location.href='../';" value="Volver" />
+	</form>
+
+
+{% endblock %}

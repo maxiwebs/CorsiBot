@@ -1,0 +1,135 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div>
+	  <h2>Toma De Datos</h2>
+	</div>
+	<form method="post" action="../select_toma_datos/"  class="post-form">
+	{% csrf_token %}
+	<table class="table">
+	 <tr><td>
+		<select name='tomaId'>
+		{% for toma in lista_tomasDeDatos %}
+			{% if tomaDeDatos.id == toma.id %}
+				<option value="{{toma.id}}" selected>{{ toma.nombreTomaDeDatos }} - {{toma.idProtocolo}}</option>
+			{% else %}
+				<option value="{{toma.id}}">{{ toma.nombreTomaDeDatos }} - {{toma.idProtocolo}}</option>
+			{% endif%}
+		{% endfor %}
+		</select>
+	 </td></tr>
+	 <tr>
+	  <td>
+	  	<button style="width:110px" type="submit">Actualizar</button>
+	  </td>
+	</tr>
+	</table>
+	</form>
+	<br>
+	<div>
+	  <h2>Seleccione el Usuario de {{tomaDeDatos.nombreTomaDeDatos}}</h2>
+	</div>
+	<form method="post" action="select_usr/play_wait_sec/"  class="post-form">
+	<input type="hidden" name="idSec" value="1">
+	<input type="hidden" name="idIntento" value="0">
+	<input type="hidden" name="idProcess" value="0">
+	<input type="hidden" name="accion" value="siguienteSec">
+	{% csrf_token %}
+
+<table class="table table-hover">
+			<thead class="thead-inverse">
+				<th><a href="../../select_toma_datos/" title="Ordenar Mayor"><font color='white'>Usuario</th>
+				{% if ordenIntentos == "intasc"%}
+					<th><a href="../../select_toma_datos/{{tomaDeDatos.id}}-intdesc/" title="Ordenar Mayor"><font color='white'>#Evaluaciones</font></a></th>
+				{% else %}
+					<th><a href="../../select_toma_datos/{{tomaDeDatos.id}}-intasc/" title="Ordenar Menor"><font color='white'>#Evaluaciones</font></a></th>
+				{% endif %}
+				<th><b>Acción</b></th>
+			</thead>
+			<tbody>
+	{% for usuario in lista_usuarios%}
+			<tr> <td>{{ usuario.nombre }}</td>
+				<td>
+				{{usuario.cantIntentos}}
+				</td>
+				<td>
+				<button name="usrId" value="{{usuario.id}}" type="submit" style="width:80px">Evaluar</button>
+				</td>
+			</tr>
+	{% endfor %}
+		</tbody>
+		</table>
+		<input type="button" style="width:110px" onclick="location.href='../';" value="Volver" />
+	</form>
+	<br>
+
+	<div>
+	  <h2>Secuencias Protocolo</h2>
+	</div>
+
+	{% regroup botonesSecuencias by idSec as listaBotones %}
+	<form action="play" method="post">{% csrf_token %}
+			<table class="table table-hover">
+				<thead class="thead-inverse">
+		  		<th>Id Sec</th>
+				<th>Botones</th>
+				</thead>
+				<tbody>
+		{% for idSec in listaBotones %}
+				<tr> <td>{{ idSec.grouper }}</td><td>
+				        {% for boton in idSec.list %}
+							{{ boton.valorBoton }}
+						{% endfor %}
+					</td>
+				</tr>
+		{% endfor %}
+			</tbody>
+			</table>
+			<br>
+		</form>
+
+
+	<br>
+	<div>
+	  <h2>Info del Protocolo</h2>
+	</div>
+	
+	<div>
+		<table class="table table-hover">
+			<thead class="thead-inverse">
+	  		<th>Protocolo</th>
+	  		<th>{{protocolo.nombreProtocolo}}</th>
+	 <tbody>
+	 <tr><td><b># Secs: </b></td>
+		 <td>{{protocolo.cantSecs}}</td>
+	 </tr>
+	 <tr><td><b>tiempoEncendidoLuz: </b></td>
+		 <td>{{protocolo.tiempoEncendidoLuz}}</td>
+	 </tr>
+	 <tr><td><b>tiempoEntreLuces: </b></td>
+		 <td>{{protocolo.tiempoEntreLuces}}</td>
+	 </tr>
+	 <tr><td><b>tiempoComienzaIntento: </b></td>
+		 <td>{{protocolo.tiempoComienzaIntento}}</td>
+	 </tr>
+	 <tr><td><b>timeoutRespuesta: </b></td>
+		 <td>{{protocolo.timeoutRespuesta}}</td>
+	 </tr>
+ 	 <tr><td><b>cantErroresCorte: </b></td>
+		 <td>{{protocolo.cantErroresCorte}}</td>
+	 </tr>
+	 <tr><td><b>reverso: </b></td>
+		 <td>{{protocolo.reverso}}</td>
+	 </tr>
+	 <tr><td><b>feedbackLuces: </b></td>
+		 <td>{{protocolo.feedbackLuces}}</td>
+	 </tr>
+	 <tr><td><b>feedbackSonido: </b></td>
+		 <td>{{protocolo.feedbackSonido}}</td>
+	 </tr>
+	</tbody>
+	</table>
+</div>
+<br>
+
+{% endblock %}

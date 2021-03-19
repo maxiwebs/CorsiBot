@@ -1,0 +1,8 @@
+{
+    "tomaDeDatos": {
+        "nombreTomaDeDatos": "TomaDatosEjemplo"
+    },
+    "usuarios": {
+        "nombres": ["User1","User2","User3"]
+    }
+}

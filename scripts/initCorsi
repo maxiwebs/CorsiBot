@@ -1,0 +1,4 @@
+#!/bin/bash
+
+pigpiod;
+/opt/virtualenvs/django/bin/python /home/pi/djangoProjects/manage.py runserver 192.168.50.10:8000

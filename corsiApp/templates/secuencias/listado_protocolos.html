@@ -1,0 +1,35 @@
+{% extends 'inicio.html' %}
+{% block content %}	
+<a href='subir_protocolo/'>Subir Protocolo</a>
+	<div>
+	  <h2><Listado de Protocolos</h2>
+	    <p>Protocolos cargados</p>
+	</div>
+
+<form action="../export_csv/" method="post">{% csrf_token %}
+		<input type="hidden" name="export" value="todo">
+		<table class="table table-hover">
+			<thead class="thead-inverse">
+				<th>Nombre</th>
+				<th>#Secuencias</th>
+				<th>Ver</th>
+			</thead>
+			<tbody>
+	{% for protocolo in lista_protocolos %}
+			<tr>
+			<td>{{ protocolo.nombreProtocolo }}</td>
+			<td>{{ protocolo.cantSecs }}</td>
+			<td>
+				<a href='/lista_protocolos/ver/{{ protocolo.id }}/0/'>Ver</a>
+			</td></tr>
+	{% endfor %}
+		</tbody>
+		</table>
+		<br>
+		<input type="button" style="width:110px" onclick="location.href='../';" value="Volver" />
+		<button name="tipo" value="resumido" style="width:200px" type="submit">Exportar CSV Resumido</button>
+		<button name= "tipo" value="extendido" style="width:200px" type="submit">Exportar CSV Extendido</button>
+	</form>
+{% endblock %}
+
+

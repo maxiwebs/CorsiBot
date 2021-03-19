@@ -1,0 +1,147 @@
+{% load staticfiles %}
+<html>
+<head>
+<script src="{% static 'js/jquery-latest.js' %}"></script>
+<script src="{% static 'js/menu.js' %}"></script>
+
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    	<link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">	
+	<link rel="stylesheet" href="{% static 'css/app.css' %}">
+	<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+	<link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+</head>
+<body>
+	<div class="page-header">  
+		<h1>Bloques de Corsi</h1>
+	   	<header>
+		</header>
+	</div>
+
+{% block content %}
+	<table class="table">
+	<tr><td>
+	  <h2>Reproducir y Esperar Secuencia...</h2>
+	</td></tr>
+	</table>
+
+	<form method="post" action="../ver/"  class="post-form" id="form" name="form">
+	{% csrf_token %}
+ 	 <input type="hidden" name="idProtocolo" value="{{idProtocolo}}">
+	 <input type="hidden" name="idIntento" value="{{idIntento}}">
+	 <input type="hidden" name="idProcess" value="{{idProcess}}"> 	 
+	 <input type="hidden" name="usrId" value="{{usuario.id}}">
+	 <input type="hidden" name="idSec" value="{{secId}}">
+	 <input type="hidden" name="secuenciaPrueba" value="{{secuenciaPrueba}}">
+	 <input type="hidden" name="validez" value="timeout">
+
+	<table class="table">
+		<tr>
+			<td>
+				<button name="validez" value="valida" type="submit" style="width:110px">Validar Intento</button>
+			</td>
+			<td>
+				<button name="validez" value="anulada" type="submit" style="width:110px">Anular Intento</button>
+			</td>
+			<td>
+				<button name="validez" value="finalizado" type="submit" style="width:110px">Finalizar Toma</button>
+			</td>
+		</tr>
+	</table>
+	</form>
+
+<table class="table table-hover">
+	 <tr><td>Botones Secuencia: </td>
+	 	<td>
+	 	{% for boton in botonesSecuencia %}
+	 		{{boton.valorBoton}}
+	 	{% endfor %}
+	 	</td>
+	 </tr>
+	 <tr><td>Usuario: </td><td>{{usuario.nombre}}</td></tr>
+	 <tr><td>Protocolo: </td><td>{{idProtocolo}}</td></tr>
+	 <tr><td>Secuencia: </td><td>{{secId}}</td></tr>
+	 <tr><td>Sec Prueba: </td><td>{{secuenciaPrueba}}</td></tr>
+ 	 <tr><td>Restan Jugar: </td><td>{{cantSecsFaltantes}}</td></tr>
+ 	 <tr><td>Errores Consecutivos: </td><td>{{cantErroresConsecutivos}}</td></tr>
+	</table>
+	{% if timeoutRespuesta > 0 %}
+	<table class="table">
+		<tr><td><h4 id='Timeout'></h4></td></tr>
+	</table>
+
+	{% endif%}
+
+{% endblock %}
+
+{% block checkRedButton %}
+<script src="{% static 'js/DjangoAjax.js' %}"></script>​
+<script>
+	var jugando = true;
+	function vamos_submit() {
+		//global jugando;
+		jugando = false;
+	    $("#form").submit();
+	}
+
+	function checkRedButtonJs(){
+		console.log("Llamando a checkRedButtonJs");
+		$.ajax({
+			url: 'checkRedButtonFin/',
+			type: 'post',
+			async:false, // set async false to wait for previous response
+			data:{ idSec: "{{secId}}",
+				   idProtocolo: "{{idProtocolo}}",
+				   idIntento: "{{idIntento}}",
+				   idProcess: "{{idProcess}}",
+				   usrId: "{{usuario.id}}",
+				 },
+			success: function(data){
+				if(data.status == 1){ //Si apretaron boton rojo
+					//Mando el formulario				
+	                $("#form").submit();
+            	} else{
+            		if (jugando) {
+			        	setTimeout(checkRedButtonJs, 200);
+            		}
+            	}
+            },
+            error: function(){
+            	if (jugando) {
+		        	setTimeout(checkRedButtonJs, 200);
+		        }
+		    }
+		});
+	}
+
+
+	$(document).ready(function(){//checkRedButtonJs();
+        setTimeout(checkRedButtonJs, 1000);
+        }	
+	);
+
+</script>
+<script language="JavaScript">
+ /* Determinamos el tiempo total en segundos */
+var totalTiempo={{timeoutRespuesta}};
+
+function updateReloj(){
+    document.getElementById('Timeout').innerHTML = "Tiempo restante "+totalTiempo+" segundos";
+
+    if(totalTiempo==0){
+        //Mando el formulario
+        $("#form").submit();
+    }else{
+        /* Restamos un segundo al tiempo restante */
+        totalTiempo-=1;
+        /* Ejecutamos nuevamente la función al pasar 1000 milisegundos (1 segundo) */
+        setTimeout("updateReloj()",1000);
+    }
+}
+
+window.onload=updateReloj;
+
+</script>
+{% endblock %}
+

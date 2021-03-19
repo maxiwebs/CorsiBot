@@ -1,0 +1,40 @@
+{% load staticfiles %}
+<html>
+<head>
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    	<link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">	
+	<link rel="stylesheet" href="{% static 'css/app.css' %}">
+	<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+	<link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+</head>
+<body>
+	<div class="page-header">  
+		<h1><a href="/">Bloques de Corsi</a></h1>
+	   	<header>
+			<div class="menu_bar">
+				<a href="#" class="bt-menu"><span class="icon-menu"></span>Menu</a>
+			</div>
+			<nav>
+				<ul>
+					<li><a href="/"><span class="icon-home3"></span>Inicio</a></li>
+					<li><a href="{% url 'documentacion' %}"><span class="icon-file-text"></span>Documentaci&oacute;n</a></li>
+					<li><a href="{% url 'lista_protocolos' %}"><span class="icon-list"></span>Protocolos</a></li>
+					<li><a href="{% url 'select_toma_datos' %}"><span class="icon-play"></span>Evaluar</a></li>
+					<li><a href="/"><span class="icon-info"></span>Desarrollo</a></li>
+				</ul>
+			</nav>
+		</header>
+	</div>
+	<section>
+	{% block content %}
+	{% endblock %}
+    </section>
+
+<script src="{% static 'js/jquery-latest.js' %}"></script>
+<script src="{% static 'js/menu.js' %}"></script>
+{% block checkRedButton %}
+{% endblock %}
+</body>
+</html>

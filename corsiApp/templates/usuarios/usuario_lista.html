@@ -1,0 +1,22 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div>
+	  <h2>Listado de Usuarios</h2>
+	</div>
+	
+<table style="width: 80%">
+			<thead>
+				<td><b>Apellido</b></td>
+				<td><b>Nombre</b></td>
+				<td><b>Editar</b></td>
+			</thead>
+    {% for usuario in lista_usuarios %}
+			<tr><td>{{ usuario.apellidos }}</a></td>
+				<td>{{ usuario.nombre }}</td>
+				<td><a href="{% url 'usuario_ver' pk=usuario.pk %}">Ver/Editar</a></td>
+				</tr>
+				
+	{% endfor %}
+</table>
+{% endblock %}

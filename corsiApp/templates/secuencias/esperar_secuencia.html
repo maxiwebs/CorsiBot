@@ -1,0 +1,19 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+	<div>
+	  <h2>Esperando Secuencia...</h2>
+	</div>
+	<form method="post" action="ver/"  class="post-form">
+	{% csrf_token %}
+	<table>
+	 <input type="hidden" name="usrId" value="{{usuario}}">
+	 <input type="hidden" name="idSec" value="{{secId}}">
+	 <tr><td>Usuario:</td><td>{{usuario}}</td></tr>
+	 <tr><td>Secuencia:</td><td>{{secId}}</td></tr>
+	</table>
+	<button type="submit">Ver</button>
+	</form>
+
+
+{% endblock %}

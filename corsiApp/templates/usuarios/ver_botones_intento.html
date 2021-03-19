@@ -1,0 +1,96 @@
+{% extends 'inicio.html' %}
+{% load static %}
+
+{% block content %}
+	<div>
+	  <h2>Analisis de la Evaluación</h2>
+	</div>
+	<b>Protocolo:</b> {{ intento.idUsr.idTomaDeDatos.idProtocolo.nombreProtocolo }}<br>
+	<b>Nombre Toma Datos:</b> {{ intento.idUsr.idTomaDeDatos.nombreTomaDeDatos }}<br>  
+	<b>Usuario:</b> {{ intento.idUsr.nombre }}<br>
+	<b>Fecha:</b> {{ intento.idUsr.idTomaDeDatos.ultimaFechaEvaluacion }}
+	<br>
+
+	<br>
+
+{{ listaBotonesPresionados }}
+
+{% regroup botonesSecuencias by idSec as listaBotones %}
+
+<table style="width: 100%">
+	<tr>
+		<td>
+			<table class="table table-hover">
+				<thead class="thead-inverse">
+					<th>IdSec</th>
+					<th>Botones Secuencia</th>
+				</thead>
+				<tbody>
+					{% for idSec in listaBotones %}
+						<tr> <td>{{ idSec.grouper }}</td>
+						    <td>{% for boton in idSec.list %}
+									{{ boton.valorBoton }}
+								{% endfor %}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</td>
+{% regroup botonesPresionados by idSec as listaBotonesPresionados %}
+		<td valign="top">
+			<table class="table table-hover">
+				<thead class="thead-inverse">
+					<th>Botones Presionados</th>
+				</thead>
+				<tbody>
+					{% for idSec in listaBotonesPresionados %}
+						<tr><td>{% for boton in idSec.list %}
+									{{ boton.valorEvento }}
+								{% endfor %}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</td>
+		<td valign="top">
+			<table class="table table-hover">
+				<thead class="thead-inverse">
+					<th>Correcto / Incorrecto</th>
+					<th></th>
+				</thead>
+				<tbody>
+					{% for idSec in secuenciasCorrectasIncorrectas %}
+					<tr>
+								{% if idSec.correcto %}
+								<td><img src="{% static 'imgs/tilde.png' %}"></td>
+								<td><font color="white"> OK</font></td>
+								{% else %}
+								<td><img src="{% static 'imgs/cruz.png' %}"></td>
+								<td><font color="white">  MAL </font></td>
+								{% endif %}
+						</td>
+					</tr>
+					{% endfor%}
+				</tbody>
+			</table>
+		</td>
+	</tr>
+</table>
+<br>
+<form action="../../../../export_csv/" method="post">{% csrf_token %}
+	<input type="hidden" name="tipo" value="extendido">
+	<input type="hidden" name="export" value="intento">
+	<input type="hidden" name="idIntento" value="{{intento.id}}">
+
+		{% if paginaPrev == "verSecuJugada" %}
+			<input type="button" style="width:110px" onclick="location.href='../../../';" value="Inicio" />
+		{% else %}
+			<input type="button" style="width:110px" onclick="location.href='javascript:history.back(-1);';" value="Volver" />
+		{% endif %}
+
+	<button style="width:110px" type="submit">Exportar CSV</button>
+</form>
+
+
+
+{% endblock %}

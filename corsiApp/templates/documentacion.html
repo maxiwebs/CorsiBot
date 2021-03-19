@@ -1,0 +1,148 @@
+{% extends 'inicio.html' %}
+{% load static %}
+
+{% block content %}
+	<div>
+	  <h1>Documentación</h1>
+	</div>
+
+<p>Para comenzar:</p>
+
+<ul class="a">
+	<li><a href="../lista_protocolos/subir_protocolo/">Cargar Protocolo </a> desde archivo Json -> <a href="#protocolo">(Ejemplo de protocolo.json)</a></li>
+	<li><a href ="../lista_protocolos/subir_toma_datos/">Cargar una Toma de Datos</a> con sus usuarios y asociarla al protocolo -> <a href="#tomaDatos">(Ejemplo de tomaDeDatos.json)</a></li>
+	<li>Ahora ya es posible <a href="../select_toma_datos/">Evaluar!</a></li>
+</ul>
+
+<ul class="a">
+	<li>Para ver los protocolos cargados y sus tomas de datos asociadas, ir a listado de <a href="../lista_protocolos/"> Protocolos </a>cargados.</li>
+	<li>Para ver los resultados de un Intento, ir a listado de <a href="../lista_protocolos/">Protocolos</a>, seleccionar la Toma de Datos y para cada uno de los usuarios se listará cada uno de los intentos realizados.</li>
+</ul>
+
+	<div>
+	  <h2>Protocolos</h2>
+	</div>
+	<ul class="a">
+		<li>Los protocolos se definen a través de un archivo con formato json.</li>
+		<li><b>Los campos obligatorios son los de nombreProtocolo y trials (secuencias de botones).</b></li>
+		<li>Junto a cada trial, se define si es de prueba o no. [True/False].
+		<li>Todo lo que no esté definido, se completará con sus valores por defecto, indicados en el Ejemplo de Protocolo Completo.</li>
+	</ul>	
+
+	<div>
+	  <h3>Ejemplo de Protocolo Mínimo</h3>
+	</div>
+	<pre>
+<div class="code">{
+	"protocolo": {
+		"nombreProtocolo": "Protocolo Minimo"
+	},
+	"properties": {
+	},
+	"trials": {
+		"1": ["A","true"],
+		"2": ["B","false"]
+	}
+}
+</pre>
+</div>
+
+	<ul class="a">
+		<li>Si no se detallan las properties, se completarán por defecto como indica el Ejemplo de Protocolo Completo.</li>
+	</ul>
+
+<a name="protocolo"></a>
+	<div>
+	  <h3>Ejemplo de Protocolo Completo</h3>
+	</div>
+	<a href="{% static 'examples_json/protocolo.json' %}" download>Descargar ejemplo</a>
+	<pre>
+<div class="code">{
+	"protocolo": {
+		"nombreProtocolo": "Protocolo Ejemplo Completo"
+	},
+	"properties": {
+		"tiempoEncendidoLuz": 750,
+		"tiempoEntreLuces": 750,
+		"tiempoComienzaIntento": 0,
+		"timeoutRespuesta": 35000,
+		"cantErroresCorte": 0,
+		"reverso": "False",
+		"botonRojoIniciaTrial":"False",
+		"luzComienzaSecuencia":"True",
+		"colorLuzComienzaSecuencia":"blue",
+		"tiempoLuzComienzaSecuencia":"500",
+		"repeticionLuzComienzaSecuencia":"3",
+		"intervaloRepeticionLuzComienzaSecuencia":"100",
+		"luzEsperaBotones":"True",
+		"colorLuzEsperaBotones":"blue",
+		"luzAnalisisIntento":"False",
+		"colorLuzAnalisisIntento":"yellow",
+		"feedbackLuces": "False",
+		"colorSecuenciaCorrecta":"green",
+		"colorSecuenciaIncorrecta":"red",
+		"tiempoLuzFeedback":"200",
+		"repeticionLuzFeedback":"3",
+		"intervaloRepeticionLuzFeedback":"100",
+		"luzEsperaProxSecuencia": "False",
+		"colorLuzEsperaProxSecuencia": "blue",
+		"feedbackSonido":"False",
+		"luzTerminaTomaDatos":"False"
+	},
+	"trials": {
+		"1": ["GI","true"],
+		"2": ["B","false"],
+		"3": ["CA","false"],
+		"4": ["DGH","false"],
+		"5": ["ACD","false"]
+	}
+}
+</pre>
+</div>
+
+	<ul class="a">
+		<li>BotonRojoIniciaTrial habilitado permite que el usuario pueda comenzar la siguiente secuencia con el botón rojo. Si está en False lo tiene que hacer el operador mediante el botón "Siguiente Secuencia".</li>
+		<li>LuzEsperaProxSecuencia permite habilitar la luz (y el colorLuzEsperaProxSecuencia) mientras se espera la orden para comenzar una próxima secuencia. En False se mantendrá apagada.</li>
+		<li>El reverso habilitado evalua las secuencias de manera inversa. Ej: Si la secuencia es ABC lo correcto será que el usuario presione CBA.</li>
+		<li>El feedbackLuces, si está desactivado, sólo dará feedback para las secuencias de prueba.</li>		
+		<li>El feedbackSonido, si está activado, indicará con tres beeps o uno contínuo si la respuesta ha sido correcta o incorrecta, respectivamente.</li>
+		<li>La luzTerminaTomaDatos indica con verde o rojo si se han completado correctamente o no todos los trials del Protocolo.</li>
+	</ul>	
+
+	<div>
+	  <h3>Linea de Tiempo</h3>
+	</div>
+	Secuencia de tiempos y parámetros de las variables de un Protocolo:
+	<br>
+	<img src="{% static 'imgs/CorsiDoc.png' %}">
+	<br>
+	
+	<div>
+	  <h2>Toma De Datos</h2>
+	</div>
+	<ul class="a">
+		<li>Las tomas de datos definen los usuarios que pueden ser evaluados en un protocolo.</li>
+		<li>Debe tener un nombre y al cargarla se debe asociar sólo a un protocolo.</li>
+		<li>Se pueden agregar usuarios a una toma de datos cargada.</li>
+		<li>La fecha de la toma de datos se completará automáticamente al cargarla.</li>
+	</ul>	
+
+<a name="tomaDatos"></a>
+	<div>
+	  <h3>Ejemplo de Toma de Datos</h3>
+	</div>
+	<a href="{% static 'examples_json/tomaDatos.json' %}" download>Descargar ejemplo</a>
+	<pre>
+<div class="code">{
+    "tomaDeDatos": {
+        "nombreTomaDeDatos": "TomaDatosEjemplo"
+    },
+    "usuarios": {
+        "nombres": ["User1","User2","User3"]
+    }
+}
+</pre>
+</div>
+	<input type="button" style="width:110px" onclick="location.href='javascript:history.back(-1);';" value="Volver" />
+
+{% endblock %}
